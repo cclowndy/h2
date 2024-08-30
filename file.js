@@ -1,37 +1,31 @@
 const express = require('express');
-const routes = require('./router/user')
+// const routes = require('./router/user')
 const session = require('express-session');
-const bodyParser = require('body-parser');
-const user = require('./router/user');
 const app = express()
 const PORT = 5000;
 
-// Initialize session middleware with options
-app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}));
-app.use(bodyParser.json());
+// Fillter data
+
+// const data = ["adid", "tracker_name"]
+// for (const [key, value] of Object.entries(object1)) {
+//   if (data.includes(key)) {
+
+//   }
+// }
+
+app.use("/customer", session({ secret: "fingerprint_customer", resave: true, saveUninitialized: true }));
 app.use(express.json());
-app.use("/", user);
 
-// Callback URL endpoint
-app.post('/callback', (req, res) => {
-  const { tracker, tracker_name } = req.body;
+app.get('/callback', (req, res) => {
 
-  console.log('Received callback data:', req.body);
-
-  // Respond with a success message
-  res.json({
-      status: 'success',
-      message: 'Callback received',
-      data: {
-          tracker,
-          tracker_name
-      }
-  });
-});
-
+  if (req.params?.redirect) {
+    return res.json('Hello w')
+  }
+  return res.redirect("//http://localhost:5000/callback?redirect=True")
+})
 
 app.listen(PORT, () => {
-    console.log(`Running at http://localhost:${PORT}`);
-  });
+  console.log(`Running at http://localhost:${PORT}`);
+});
 
 
